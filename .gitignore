@@ -1,0 +1,14 @@
+main
+main_*
+*.o
+*.d
+checker
+log*
+input.txt
+output.txt
+gmon.out
+*.dll
+*.log
+*log
+.*.swp
+tags
