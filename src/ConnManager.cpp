@@ -19,7 +19,10 @@ void* serve(void* connPtr)
     while(1)
     {
         int rc = Ok;
-        string s = conn.GetRequest(rc);
+        Request req = conn.GetRequest(rc);
+        printf("Method: %s\n",req.method.c_str());
+        printf("Path: %s\n",req.path.c_str());
+        printf("Version: %s\n",req.version.c_str());
         if(rc == Err )
         {
             puts("Connection Closed");

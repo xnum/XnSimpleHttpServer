@@ -1,14 +1,26 @@
 #include "Connection.h"
 
-string Connection::GetRequest(int &rc)
+Request Connection::GetRequest(int &rc)
 {
     string s;
     rc = m_recv(s);
-    fprintf(stderr, "Request str: '%s'\n",s.c_str());
-    if( s=="" )
-        sleep(3);
+    //fprintf(stderr, "Request str: '%s'\n",s.c_str());
+    Request req;
 
-    return s;
+    stringstream ss(s);
+    string line,first_line;
+    getline(ss,first_line);
+    stringstream ss2(first_line);
+    ss2 >> req.method >> req.path >> req.version;
+    while(getline(ss,line)) 
+    {
+        stringstream ss3(line);
+        string k,v;
+        ss3 >> k >> v;
+        req.parameter[k] = v;
+    }
+
+    return req;
 }
 
 int Connection::m_recv(string &str)

@@ -1,4 +1,5 @@
 #include "Common.h"
+#include "Request.h"
 #include <netinet/in.h>
 
 #pragma once
@@ -9,7 +10,7 @@ public:
     int fd;
     pthread_t thread;
 
-    string GetRequest(int &rc);
+    Request GetRequest(int &rc);
 
 private:
     int m_recv(string &str);

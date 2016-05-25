@@ -3,6 +3,8 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <map>
 
 #include <unistd.h>
 #include <errno.h>
@@ -14,6 +16,8 @@
 
 using std::string;
 using std::vector;
+using std::stringstream;
+using std::map;
 
 #pragma once
 
