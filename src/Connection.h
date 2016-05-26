@@ -12,6 +12,7 @@ public:
 
     Request GetRequest(int &rc);
     int SendResponse(string str);
+    void Close();
 private:
     int m_recv(string &str);
 };

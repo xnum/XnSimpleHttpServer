@@ -3,7 +3,7 @@
 string Response::toString()
 {
     stringstream ss;
-    ss << "HTTP/1.1 " << status_code << "OK" << endl;
+    ss << "HTTP/1.1 " << getStatusCodeStr() << endl;
     for( auto& ele : param )
     {
         ss << ele.first << ": " << ele.second << endl;
@@ -13,6 +13,26 @@ string Response::toString()
     ss << content << endl;
 
     return ss.str();
+}
+
+string Response::getStatusCodeStr()
+{
+    if( status_code == 200 )
+        return "200 OK";
+
+    if( status_code == 403 )
+        return "403 Forbidden";
+
+    if( status_code == 404 )
+        return "404 Not Found";
+
+    if( status_code == 301 )
+        return "301 Moved Permanently";
+
+    if( status_code == 302 )
+        return "302 Found";
+
+    return "500 Internal Server Error";
 }
 
 Response HttpProcess::DealRequest(Request req)

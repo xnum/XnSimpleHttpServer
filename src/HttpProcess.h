@@ -15,6 +15,7 @@ class Response
         Response(bool e) { error = e; } // fast consturct error response
 
         string toString();
+        string getStatusCodeStr();
 };
 
 class HttpProcess

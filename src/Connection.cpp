@@ -20,6 +20,13 @@ Request Connection::GetRequest(int &rc)
         req.parameter[k] = v;
     }
 
+    size_t pos = req.path.find("?");
+    if(pos != string::npos)
+    {
+        req.getParam = req.path.substr(pos);
+        req.path = req.path.substr(0,pos);
+    }
+
     return req;
 }
 
@@ -29,6 +36,11 @@ int Connection::SendResponse(string str)
     if( rc == str.size() )
         return Ok;
     return Err;
+}
+
+void Connection::Close()
+{
+    close(fd);
 }
 
 int Connection::m_recv(string &str)

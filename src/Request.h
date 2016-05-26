@@ -7,4 +7,5 @@ class Request {
     string path;
     string version;
     map<string,string> parameter;
+    string getParam;
 };
