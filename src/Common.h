@@ -15,6 +15,7 @@
 #include <sys/socket.h>
 #include <pthread.h>
 #include <sys/select.h>
+#include <sys/stat.h>
 
 using std::string;
 using std::vector;

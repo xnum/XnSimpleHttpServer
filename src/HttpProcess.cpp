@@ -58,13 +58,14 @@ Response HttpProcess::GetRequest(Request req)
     Response res;
     res.param["Date"] = getDate();
     res.param["Server"] = "XnSHS";
+    res.status_code = 500;
 
     if( Ok != isExists(path) )
     {
         res.param["Content-Type"] = "text/html";
         res.status_code = 403;
         res.content = unique_ptr<char>(new char[30]);
-        sprintf(res.content.get(), "403 Forbidden (Missing file)%n",&res.size);
+        sprintf(res.content.get(), "403 Forbidden (Missing file)\n%n",&res.size);
         return res;
     }
 
@@ -72,16 +73,32 @@ Response HttpProcess::GetRequest(Request req)
     {
         res.param["Content-Type"] = "text/html";
         res.status_code = 404;
-        res.content = unique_ptr<char>(new char[30]);
-        sprintf(res.content.get(), "404 Not Found (Permission denied)%n",&res.size);
+        res.content = unique_ptr<char>(new char[50]);
+        sprintf(res.content.get(), "404 Not Found (Permission denied)\n%n",&res.size);
         return res;
     }
 
-    getFileContent(res, path);
-    res.status_code = 200;
-    res.param["Content-Type"] = getMIMEType(getFileExt(path));
-
-    return res;
+    if( *path.rbegin() != '/' )
+    {
+        if( Ok != isDir(path) )
+        {
+            getFileContent(res, path);
+            res.status_code = 200;
+            res.param["Content-Type"] = getMIMEType(getFileExt(path));
+            return res;
+        }
+        else // 301
+        {
+            res.param["Content-Type"] = "text/html";
+            res.status_code = 301;
+            res.content = unique_ptr<char>(new char[30]);
+            sprintf(res.content.get(), "301 (Moved)\n%n",&res.size);
+            res.param["Location"] = req.parameter["Host:"] + req.path + '/';
+        }
+    }
+    else // list file
+    {
+    }
 }
 
 int HttpProcess::getFileContent(Response &res, string filePath)
@@ -186,7 +203,19 @@ int HttpProcess::isAccessible(string path)
     return Err;
 }
 
+int HttpProcess::isDir(string path)
+{
+    struct stat sb;
 
+    if (stat(path.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode))
+    {
+        return Ok;
+    }
+    else
+    {
+        return Err;
+    }
+}
 
 
 

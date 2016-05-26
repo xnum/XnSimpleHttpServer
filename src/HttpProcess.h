@@ -33,4 +33,5 @@ class HttpProcess
         string getMIMEType(string fileExt);
         int isExists(string path);
         int isAccessible(string path);
+        int isDir(string path);
 };

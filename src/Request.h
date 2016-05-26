@@ -8,4 +8,5 @@ class Request {
     string version;
     map<string,string> parameter;
     string getParam;
+    string host;
 };
