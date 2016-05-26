@@ -10,6 +10,7 @@ Request Connection::GetRequest(int &rc)
     stringstream ss(s);
     string line,first_line;
     getline(ss,first_line);
+    std::cout << first_line << endl;
     stringstream ss2(first_line);
     ss2 >> req.method >> req.path >> req.version;
     while(getline(ss,line)) 

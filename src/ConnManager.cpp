@@ -29,11 +29,6 @@ void* serve(void* connPtr)
             break;
         }
 
-        printf("Method: %s\n",req.method.c_str());
-        printf("Path: %s\n",req.path.c_str());
-        printf("Version: %s\n",req.version.c_str());
-        printf("Get: %s\n",req.getParam.c_str());
-
         Response res = httpProc.DealRequest(req);
 
         if( !res.error )

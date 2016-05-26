@@ -1,7 +1,28 @@
 #include "ConnManager.h"
 
-int main()
+string webroot = "/home/num";
+
+int main(int argc, char **argv)
 {
+    int port = 8787;
+
+    for( int i = 1; i < argc ; ++i )
+    {
+        int res = strtol(argv[i],NULL,10);
+        if( res != 0 )
+        {
+            port = res;
+            continue;
+        }
+
+        struct stat sb;
+
+        if (stat(argv[i], &sb) == 0 && S_ISDIR(sb.st_mode))
+        {
+            webroot = string(argv[i]);
+        }
+    }
+
     Listener serv;
     ConnManager connManager;
 
@@ -11,7 +32,7 @@ int main()
     }
     puts("Init Ok");
 
-    if( Ok != serv.Listen(8787) )
+    if( Ok != serv.Listen(port) )
     {
         return 2;
     }

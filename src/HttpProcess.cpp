@@ -1,13 +1,14 @@
 #include "HttpProcess.h"
 
+extern string webroot;
+
 string Response::toString()
 {
     stringstream ss;
     ss << "HTTP/1.1 " << getStatusCodeStr() << endl;
+    std::cout << " -- " << getStatusCodeStr() << endl;
     for( auto& ele : param )
     {
-        std::cout << ele.first << endl;
-        std::cout << ele.second << endl;
         ss << ele.first << ": " << ele.second << endl;
     }
     ss << "Content-Length: " << size << endl;
@@ -48,7 +49,6 @@ Response HttpProcess::DealRequest(Request req)
 
 Response HttpProcess::GetRequest(Request req)
 {
-    string webroot = "/home/num";
     string path = req.path;
     if(path[0] != '/')
     {
@@ -99,7 +99,7 @@ Response HttpProcess::GetRequest(Request req)
             return res;
         }
     }
-    else // list file
+    else // for dir
     {
         if( Ok == isAccessible(path + "index.html") )
         {
@@ -117,6 +117,14 @@ Response HttpProcess::GetRequest(Request req)
             getFileContent(res, path);
             res.status_code = 200;
             res.param["Content-Type"] = getMIMEType(getFileExt(path));
+            return res;
+        }
+        else if( Ok == isExists(path + "index.html") || Ok == isExists(path + "index.htm") )
+        {
+            res.param["Content-Type"] = "text/html";
+            res.status_code = 403;
+            res.content = unique_ptr<char>(new char[50]);
+            sprintf(res.content.get(), "403 Forbidden (has index but denied)\n%n",&res.size);
             return res;
         }
         else
@@ -166,16 +174,22 @@ int HttpProcess::getDirContent(Response &res, string filePath)
     if(dir == NULL) {
         ss << "Not Found" << endl;
     } else {
+        ss << "<pre>" << endl;
         ss << "Dir: " << filePath << endl;
         ss << "-------------------" << endl;
 
         while((readDir = readdir(dir)) != NULL) {
             if(strcmp(readDir->d_name, "..") && strcmp(readDir->d_name, ".")) {
-                ss << readDir->d_name << endl;
+                ss << "<a href='";
+                ss << readDir->d_name;
+                ss << "'>";
+                ss << readDir->d_name;
+                ss << "</a>" << endl;
             }
         }
         closedir(dir);
         ss << "-------------------" << endl;
+        ss << "</pre>" << endl;
     }
 
     string s = ss.str();
