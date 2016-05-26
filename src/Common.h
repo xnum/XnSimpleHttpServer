@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -18,6 +19,7 @@ using std::string;
 using std::vector;
 using std::stringstream;
 using std::map;
+using std::endl;
 
 #pragma once
 

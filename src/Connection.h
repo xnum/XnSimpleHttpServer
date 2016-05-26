@@ -11,7 +11,7 @@ public:
     pthread_t thread;
 
     Request GetRequest(int &rc);
-
+    int SendResponse(string str);
 private:
     int m_recv(string &str);
 };

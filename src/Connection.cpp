@@ -23,6 +23,14 @@ Request Connection::GetRequest(int &rc)
     return req;
 }
 
+int Connection::SendResponse(string str)
+{
+    int rc = send(fd, str.c_str(), str.size(), 0);
+    if( rc == str.size() )
+        return Ok;
+    return Err;
+}
+
 int Connection::m_recv(string &str)
 {
     const int len = 1024;
