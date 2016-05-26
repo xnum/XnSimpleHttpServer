@@ -98,6 +98,27 @@ Response HttpProcess::GetRequest(Request req)
     }
     else // list file
     {
+        if( Ok == isAccessible(path + "index.html") )
+        {
+            path = path + "index.html";
+
+            getFileContent(res, path);
+            res.status_code = 200;
+            res.param["Content-Type"] = getMIMEType(getFileExt(path));
+            return res;
+        }
+        else if( Ok == isAccessible(path + "index.htm") )
+        {
+            path = path + "index.htm";
+
+            getFileContent(res, path);
+            res.status_code = 200;
+            res.param["Content-Type"] = getMIMEType(getFileExt(path));
+            return res;
+        }
+        else
+        {
+        }
     }
 }
 
