@@ -31,4 +31,6 @@ class HttpProcess
         string getDate();
         string getFileExt(string str);
         string getMIMEType(string fileExt);
+        int isExists(string path);
+        int isAccessible(string path);
 };

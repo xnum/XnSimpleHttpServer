@@ -56,10 +56,29 @@ Response HttpProcess::GetRequest(Request req)
     path = webroot + path;
 
     Response res;
-    getFileContent(res, path);
-    res.status_code = 200;
     res.param["Date"] = getDate();
     res.param["Server"] = "XnSHS";
+
+    if( Ok != isExists(path) )
+    {
+        res.param["Content-Type"] = "text/html";
+        res.status_code = 403;
+        res.content = unique_ptr<char>(new char[30]);
+        sprintf(res.content.get(), "403 Forbidden (Missing file)%n",&res.size);
+        return res;
+    }
+
+    if( Ok != isAccessible(path) )
+    {
+        res.param["Content-Type"] = "text/html";
+        res.status_code = 404;
+        res.content = unique_ptr<char>(new char[30]);
+        sprintf(res.content.get(), "404 Not Found (Permission denied)%n",&res.size);
+        return res;
+    }
+
+    getFileContent(res, path);
+    res.status_code = 200;
     res.param["Content-Type"] = getMIMEType(getFileExt(path));
 
     return res;
@@ -153,6 +172,19 @@ string HttpProcess::getMIMEType(string fileExt)
 }
 
 
+int HttpProcess::isExists(string path)
+{
+    if( 0 == access(path.c_str(), F_OK) )
+        return Ok;
+    return Err;
+}
+
+int HttpProcess::isAccessible(string path)
+{
+    if( 0 == access(path.c_str(), R_OK) )
+        return Ok;
+    return Err;
+}
 
 
 
