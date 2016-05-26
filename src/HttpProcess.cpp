@@ -8,9 +8,8 @@ string Response::toString()
     {
         ss << ele.first << ": " << ele.second << endl;
     }
-    ss << "Content-Length: " << content.size() << endl;
+    ss << "Content-Length: " << size << endl;
     ss << endl;
-    ss << content << endl;
 
     return ss.str();
 }
@@ -57,7 +56,7 @@ Response HttpProcess::GetRequest(Request req)
     path = webroot + path;
 
     Response res;
-    res.content = getFileContent(path);
+    getFileContent(res, path);
     res.status_code = 200;
     res.param["Date"] = getDate();
     res.param["Server"] = "XnSHS";
@@ -66,29 +65,26 @@ Response HttpProcess::GetRequest(Request req)
     return res;
 }
 
-string HttpProcess::getFileContent(string filePath)
+int HttpProcess::getFileContent(Response &res, string filePath)
 {
     FILE* f = fopen(filePath.c_str(), "r");
     if( f == NULL )
     {
         //fprintf(stderr,"fopen error\n");
         //return Response(true);
-        return "";
+        return Err;
     }
 
     fseek(f, 0, SEEK_END);
     size_t size = ftell(f);
 
-    char* where = new char[size];
+    res.content = unique_ptr<char>(new char[size]);
+    res.size = size;
 
     rewind(f);
-    fread(where, sizeof(char), size, f);
+    fread(res.content.get(), sizeof(char), size, f);
 
-    string content(where);
-
-    delete[] where;
-
-    return content;
+    return Ok;
 }
 
 string HttpProcess::getDate()

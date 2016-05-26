@@ -37,7 +37,7 @@ void* serve(void* connPtr)
         Response res = httpProc.DealRequest(req);
 
         if( !res.error )
-            rc = conn.SendResponse(res.toString());
+            rc = conn.SendResponse(res);
     }
 
     pthread_exit(NULL);

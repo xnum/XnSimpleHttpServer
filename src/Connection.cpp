@@ -30,11 +30,11 @@ Request Connection::GetRequest(int &rc)
     return req;
 }
 
-int Connection::SendResponse(string str)
+int Connection::SendResponse(Response &res)
 {
-    int rc = send(fd, str.c_str(), str.size(), 0);
-    if( rc == str.size() )
-        return Ok;
+    string header = res.toString();
+    int rc = send(fd, header.c_str(), header.size() , 0);
+    int rc2= send(fd, res.content.get(), res.size, 0);
     return Err;
 }
 

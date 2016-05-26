@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <memory>
 
 #include <unistd.h>
 #include <errno.h>
@@ -20,6 +21,7 @@ using std::vector;
 using std::stringstream;
 using std::map;
 using std::endl;
+using std::unique_ptr;
 
 #pragma once
 
