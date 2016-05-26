@@ -6,6 +6,8 @@ string Response::toString()
     ss << "HTTP/1.1 " << getStatusCodeStr() << endl;
     for( auto& ele : param )
     {
+        std::cout << ele.first << endl;
+        std::cout << ele.second << endl;
         ss << ele.first << ": " << ele.second << endl;
     }
     ss << "Content-Length: " << size << endl;
@@ -93,7 +95,8 @@ Response HttpProcess::GetRequest(Request req)
             res.status_code = 301;
             res.content = unique_ptr<char>(new char[30]);
             sprintf(res.content.get(), "301 (Moved)\n%n",&res.size);
-            res.param["Location"] = req.parameter["Host:"] + req.path + '/';
+            res.param["Location"] = "http://" +req.parameter["Host:"] + req.path + '/';
+            return res;
         }
     }
     else // list file
@@ -118,8 +121,16 @@ Response HttpProcess::GetRequest(Request req)
         }
         else
         {
+            getDirContent(res, path);
+            res.status_code = 200;
+            res.param["Content-Type"] = "text/html";
+            return res;
         }
+
+        return Response(true);
     }
+
+    return res;
 }
 
 int HttpProcess::getFileContent(Response &res, string filePath)
@@ -140,6 +151,37 @@ int HttpProcess::getFileContent(Response &res, string filePath)
 
     rewind(f);
     fread(res.content.get(), sizeof(char), size, f);
+
+    return Ok;
+}
+
+int HttpProcess::getDirContent(Response &res, string filePath)
+{
+    struct dirent *readDir;
+    DIR *dir;
+    dir = opendir(filePath.c_str());
+
+    stringstream ss;
+
+    if(dir == NULL) {
+        ss << "Not Found" << endl;
+    } else {
+        ss << "Dir: " << filePath << endl;
+        ss << "-------------------" << endl;
+
+        while((readDir = readdir(dir)) != NULL) {
+            if(strcmp(readDir->d_name, "..") && strcmp(readDir->d_name, ".")) {
+                ss << readDir->d_name << endl;
+            }
+        }
+        closedir(dir);
+        ss << "-------------------" << endl;
+    }
+
+    string s = ss.str();
+    res.content = unique_ptr<char>(new char[s.size()+5]);
+    res.size = s.size();
+    strcpy(res.content.get(), s.c_str());
 
     return Ok;
 }

@@ -28,6 +28,8 @@ class HttpProcess
         Response GetRequest(Request);
 
         int getFileContent(Response &res, string filePath);
+        int getDirContent(Response &res, string filePath);
+
         string getDate();
         string getFileExt(string str);
         string getMIMEType(string fileExt);

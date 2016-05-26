@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 #include <ctime>
 #include <string>
 #include <vector>
@@ -16,6 +17,7 @@
 #include <pthread.h>
 #include <sys/select.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 using std::string;
 using std::vector;
