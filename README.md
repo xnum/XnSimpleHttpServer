@@ -12,9 +12,9 @@
 
 [x] Get an image file (note: the texts after (?) are used for preventing cache).
 
-[ ] Get an audio file (note: the texts after (?) are used for preventing cache).
+[x] Get an audio file (note: the texts after (?) are used for preventing cache).
 
-[ ] Get a video file (note: the texts after (?) are used for preventing cache).
+[x] Get a video file (note: the texts after (?) are used for preventing cache).
 
 [x] Get a missing file (note: you may receive a "404 NOT FOUND" error on a standard web server, but in our homework, you have to respond "403 FORBIDDEN").
 
@@ -24,10 +24,10 @@
 
 [x] Get a directory without an index file (note that we don't have the slash suffix).
 
-Execute a CGI with GET request (sample 1, 2).
+[ ] Execute a CGI with GET request (sample 1, 2).
 
-Execute a CGI with GET request and QUERY_STRING.
+[ ] Execute a CGI with GET request and QUERY_STRING.
 
-Execute a CGI with POST request:
+[ ] Execute a CGI with POST request:
 
 type something here ...
